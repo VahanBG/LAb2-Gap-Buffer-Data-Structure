@@ -76,7 +76,37 @@ MyGap_Buffer()
       gap_left = 0;
       gap_right = gap_size - gap_left-1;
       size = 10;
+	  set_buffer(size);
 }
+MyGap_Buffer(int Gap_size,int Size):MyGap_Buffer()
+{
+	buffer = new char[50];
+this-> gap_size= Gap_size;
+this-> size = Size;
+set_buffer(size);
+}
+ MyGap_Buffer( const MyGap_Buffer & other){
+    this->buffer = new char[50];
+    this->gap_size = other.gap_size;
+    this->gap_left =other.gap_left;
+    this-> gap_right =other.gap_right;
+    this->size = other.size;
+	for(int i = 0 ; i < other.size ; i++){
+        this->buffer[i] = other.buffer[i];
+    }
+}
+MyGap_Buffer(MyGap_Buffer && other){
+	this->buffer = new char[50];
+    this->gap_size = other.gap_size;
+    this->gap_left =other.gap_left;
+    this-> gap_right =other.gap_right;
+    this->size = other.size;
+	for(int i = 0 ; i < other.size ; i++){
+        this->buffer[i] = other.buffer[i];
+    }
+
+}
+
 ~MyGap_Buffer()
 {
    delete []buffer;
@@ -91,22 +121,14 @@ void insert(std::string input, int position)
 	int len = input.length();
 	int i = 0;
     
-	// If the point is not the gap check
-	// and move the cursor to that point
 	if (position != gap_left) {
-		move_cursor(position);
+	move_cursor(position);
 	}
-
-	// Insert characters one by one
 	while (i < len) {
-		// If the gap is empty grow the size
-		if (gap_right == gap_left) {
+	     if (gap_right == gap_left) {
 			int k = 10;
 			grow(k, position);
 		}
-
-		// Insert the character in the gap and
-		// move the gap
 		buffer[gap_left] = input[i];
 		gap_left++;
 		i++;
@@ -142,9 +164,14 @@ int main()
     //std::cout<<"Insert where you want input"<<std::endl;
     //std::cin>>Position;
    // aaa.grow(5,Position);
-   aaa.insert(input ,5 );
-    aaa.Print_bugf();
-    
+   //aaa.insert(input ,5 );
+    //aaa.Print_bugf();
+    MyGap_Buffer bbb( 10 , 10);
+	bbb.Print_bugf();
+	bbb.insert("Vahan",0);
+	bbb.Print_bugf();
+    MyGap_Buffer ccc;
+     ccc.Print_bugf();
 
      return 0;
 }
