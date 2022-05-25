@@ -145,22 +145,6 @@ int main()
    aaa.insert(input ,5 );
     aaa.Print_bugf();
     
-    
-	/*// Initializing the gap buffer with size 10
-	for (int i = 0; i < 10; i++) {
-		buffer[i] = '_';
-	}
 
-	cout << "Initializing the gap buffer "
-		<< "with size 10" << endl;
-
-	for (int i = 0; i < size; i++) {
-		cout << buffer[i]<<" ";
-	}
-
-	cout << endl;
-
-	
-*/
      return 0;
 }
