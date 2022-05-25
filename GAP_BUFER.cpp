@@ -1,12 +1,14 @@
 //HELLO GAP BUFER!!!
 // C++ program of implementation of gap buffer
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include<vector>
 #include<string>
 #include<cstring>
 
 class MyGap_Buffer{ 
 private:      
+
 
 char *buffer;
 int gap_size;
@@ -33,7 +35,6 @@ void grow(int  num_to_grow, int position)
 	gap_right+=num_to_grow;
 }
 // ֆունկցիան տեղափոխում է դեպի աջ զանգվածով 
-
 void left(int position)
 {
 	
@@ -45,7 +46,6 @@ void left(int position)
 	}
 }
 //Ֆունկիան տեղաշարժում է դեպի ձախ զանգվածով
-
 void right(int position)
 {
 	
@@ -75,7 +75,7 @@ MyGap_Buffer()
      gap_size = 10;
       gap_left = 0;
       gap_right = gap_size - gap_left-1;
-      size = 10;
+      size = 20;
 	  set_buffer(size);
 }
 MyGap_Buffer(int Gap_size,int Size):MyGap_Buffer()
@@ -106,16 +106,28 @@ MyGap_Buffer(MyGap_Buffer && other){
     }
 
 }
-
 ~MyGap_Buffer()
 {
    delete []buffer;
 }
+MyGap_Buffer & operator=(const MyGap_Buffer& other){
+        return *this;
+    }
 
-
+    MyGap_Buffer& operator=(MyGap_Buffer&& other) {
+	this->buffer = new char[50];
+    this->gap_size = other.gap_size;
+    this->gap_left =other.gap_left;
+    this-> gap_right =other.gap_right;
+    this->size = other.size;
+	for(int i = 0 ; i < other.size ; i++){
+        this->buffer[i] = other.buffer[i];
+    }
+            return *this;
+    }
 //Ֆունկցիան տեղադրում է տող համապատասխան դիրքում, առաջին արգումենտը այն ինչ պետք է դնի
 // երկրորդը ուտեղ
-void insert(std::string input, int position)
+void insert_string(std::string input, int position)
 {   
    
 	int len = input.length();
@@ -135,6 +147,23 @@ void insert(std::string input, int position)
 		position++;
 	}
 }
+void insert_char(char input_char, int position)
+{   
+   	int i = 0;
+    
+	if (position != gap_left) {
+	move_cursor(position);
+	}
+	//while (i < len) {
+	     if (gap_right == gap_left) {
+			int k = 10;
+			grow(k, position);
+		}
+		buffer[gap_left] = input_char;
+		gap_left++;
+		position++;
+//	}
+}
 void set_buffer(int Size){
     this->size = Size;
     for (int i = 0; i < size; i++) {
@@ -142,7 +171,7 @@ void set_buffer(int Size){
 	}
 }
 
- void Print_bugf(){
+ void Print_buf(){
      std::cout << "the gap buffer "
 		<< "with size "<< size << std:: endl;
         for (int i = 0; i < size; i++) {
@@ -154,9 +183,15 @@ void set_buffer(int Size){
 
 int main()
 {
-    MyGap_Buffer aaa;
+
+	 MyGap_Buffer aaa,bbb;
+	 lll.insert_char('v',0);
+	 lll.Print_buf();
+	 
+	 
+    /*MyGap_Buffer aaa;
     aaa.set_buffer(15);
-    aaa.Print_bugf();
+    aaa.Print_buf();
      std::string input = "VAHAN";
     int Position = 0; 
     //std::cout<<"Insert the word, wich you want tu insert"<<std::endl;
@@ -166,12 +201,14 @@ int main()
    // aaa.grow(5,Position);
    //aaa.insert(input ,5 );
     //aaa.Print_bugf();
-    MyGap_Buffer bbb( 10 , 10);
-	bbb.Print_bugf();
+    /*MyGap_Buffer bbb( 10 , 10);
+	bbb.Print_buf();
 	bbb.insert("Vahan",0);
-	bbb.Print_bugf();
+	bbb.Print_buf();
     MyGap_Buffer ccc;
-     ccc.Print_bugf();
-
+     ccc.Print_buf();
+	 MyGap_Buffer ttt;
+	 ttt.set_buffer(10);
+*/
      return 0;
 }
