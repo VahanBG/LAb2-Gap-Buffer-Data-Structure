@@ -205,35 +205,6 @@ int main()
 	 std::cout<<"get string "<<aaa.get_string(0 , 4)<<std::endl;
 	 aaa.empty_buf();
 	 aaa.Print_buf();
-	 
-	 
-	 
-	 
-
-	 //lll.insert_char('v',0);
-	 //lll.Print_buf();
-
-	 
-    /*MyGap_Buffer aaa;
-    aaa.set_buffer(15);
-    aaa.Print_buf();
-     std::string input = "VAHAN";
-    int Position = 0; 
-    //std::cout<<"Insert the word, wich you want tu insert"<<std::endl;
-    //std::cin>>input;
-    //std::cout<<"Insert where you want input"<<std::endl;
-    //std::cin>>Position;
-   // aaa.grow(5,Position);
-   //aaa.insert(input ,5 );
-    //aaa.Print_bugf();
-    /*MyGap_Buffer bbb( 10 , 10);
-	bbb.Print_buf();
-	bbb.insert("Vahan",0);
-	bbb.Print_buf();
-    MyGap_Buffer ccc;
-     ccc.Print_buf();
-	 MyGap_Buffer ttt;
-	 ttt.set_buffer(10);
-*/
+	  
      return 0;
 }
