@@ -56,20 +56,48 @@ MyGap_Buffer(MyGap_Buffer && other){
 {
    delete []buffer;
 }
-MyGap_Buffer & operator=(const MyGap_Buffer& other){
+/*MyGap_Buffer & operator=(const MyGap_Buffer& other){
         return *this;
-    }
+    }*/
+MyGap_Buffer& operator = (const MyGap_Buffer& other){
+          if (this == & other){
+              return *this ;
+          }
+		  if(this-> buffer){
+              delete[] buffer;
+          }
+          this->gap_size = other.gap_size;
+          this->gap_left =other.gap_left;
+          this-> gap_right =other.gap_right;
+          this->size = other.size; 
+		  this-> buffer = new char[other.gap_size];
+          
+		  for(int i = 0 ; i < other.size ; i++){
+             this->buffer[i] = other.buffer[i];
+          }
+          return *this ;
+}
+
 MyGap_Buffer& operator=(MyGap_Buffer&& other) {
-	this->buffer = new char[50];
-    this->gap_size = other.gap_size;
-    this->gap_left =other.gap_left;
-    this-> gap_right =other.gap_right;
-    this->size = other.size;
-	for(int i = 0 ; i < other.size ; i++){
-        this->buffer[i] = other.buffer[i];
-    }
-            return *this;
-    }
+	if (this == & other){
+              return *this ;
+          }
+		  if(this-> buffer){
+              delete[] buffer;
+          }
+          this->gap_size = other.gap_size;
+          this->gap_left =other.gap_left;
+          this-> gap_right =other.gap_right;
+          this->size = other.size; 
+		  this-> buffer = new char[other.gap_size];
+          
+		  for(int i = 0 ; i < other.size ; i++){
+             this->buffer[i] = other.buffer[i];
+          }
+          return *this ;
+}
+	
+//օպերատոր << բայց վստահ չեմ))
 /*void operator<<(std::ostream& os, const string& str)
 {
     std::cout << str;
@@ -197,6 +225,11 @@ int main()
 
 	 MyGap_Buffer aaa(50,15);
 	 aaa.Print_buf();
+	 MyGap_Buffer bbb(aaa);
+	 bbb.Print_buf();
+	 MyGap_Buffer ccc ;
+	 ccc = bbb ;
+	 ccc.Print_buf();
 	 aaa.insert_char('V',0);
 	 aaa.Print_buf();
 	 aaa.insert_string("Vahan",0);
@@ -205,6 +238,10 @@ int main()
 	 std::cout<<"get string "<<aaa.get_string(0 , 4)<<std::endl;
 	 aaa.empty_buf();
 	 aaa.Print_buf();
-	  
+	  /*MyGap_Buffer bbb;
+	  bbb = aaa ;
+	  bbb.Print_buf();*/
+
+
      return 0;
 }
