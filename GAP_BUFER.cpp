@@ -238,9 +238,7 @@ int main()
 	 std::cout<<"get string "<<aaa.get_string(0 , 4)<<std::endl;
 	 aaa.empty_buf();
 	 aaa.Print_buf();
-	  /*MyGap_Buffer bbb;
-	  bbb = aaa ;
-	  bbb.Print_buf();*/
+	 
 
 
      return 0;
