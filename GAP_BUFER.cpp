@@ -74,12 +74,7 @@ MyGap_Buffer& operator=(MyGap_Buffer&& other) //Move operator assignment =
 	     return *this ;
 }
 
-//օպերատոր << բայց վստահ չեմ))
-/*void operator<<(std::ostream& os, const string& str)
-{
-    std::cout << str;
-    os << str;
-}*/
+
 
 void set_buffer(int Size_buf ){
     for (int i = 0; i < Size_buf; i++) {

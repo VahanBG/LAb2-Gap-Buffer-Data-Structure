@@ -1,256 +1,321 @@
 #include <iostream>
-#include<vector>
-#include<string>
-#include<cstring>
-#include<fstream>
+#include <vector>
+#include <string>
+#include <cstring>
+#include <fstream>
 
-class MyGap_Buffer{ 
-private:    
-char *buffer;
-int gap_size;
-int gap_left;
-int gap_right;
-int size;
-
-public:   //Default constructor
-MyGap_Buffer():gap_size{},buffer{nullptr},gap_left{},gap_right{gap_size - gap_left-1},size{}
-{}
-MyGap_Buffer(std::string Myword) //Parameterized constructor
+class MyGap_Buffer
 {
-this-> gap_size = Myword.length() * 2  ;
-this-> size = Myword.length() + gap_size;
-buffer = new char[size];
-for(int i = 0 ; i < Myword.length() ; i++ ){
-    buffer[i] = Myword[i];
-}	
-for(int i = Myword.length() ; i < size ; i++ ){
-    buffer[i]= '-';
-}
-gap_left = size - gap_size;
-gap_right = size - 1;
+	private:
+		char *buffer;
+	int gap_size;
+	int gap_left;
+	int gap_right;
+	int size;
 
-
-
-}
-MyGap_Buffer( const MyGap_Buffer & other){ //Copy constructor
-    this->gap_size = other.gap_size;
-	this->buffer = new char[other.gap_size];
-    this->gap_left =other.gap_left;
-    this-> gap_right =other.gap_right;
-    this->size = other.size;
-	for(int i = 0 ; i < other.size ; i++){
-        this->buffer[i] = other.buffer[i];
-    }
-}
-MyGap_Buffer(MyGap_Buffer && other):gap_size{other.gap_size},gap_left{other.gap_left},gap_right{other.gap_right}
-{
-	std::swap(buffer , other.buffer);
-	delete [] other.buffer;
-	other.buffer = nullptr;
-	other.gap_size = 0 ;	
-	other.gap_left = 0 ;
-    other.gap_right  = 0 ;
-}
-~MyGap_Buffer() //Destructor
-{
-   delete []buffer;
-   buffer = nullptr;
-}
-MyGap_Buffer& operator = (const MyGap_Buffer& other){//Copy operator assignment =
-          this->gap_size = other.gap_size;
-          this->gap_left =other.gap_left;
-          this-> gap_right =other.gap_right;
-          this->size = other.size; 
-		  this-> buffer = new char[other.gap_size];          
-		  for(int i = 0 ; i < other.size ; i++){
-             this->buffer[i] = other.buffer[i];
-          }
-          return *this ;
-}
-MyGap_Buffer& operator=(MyGap_Buffer&& other) //Move operator assignment =
-{
-	std::swap(gap_size , other.gap_size);
-	std::swap(buffer , other.buffer);
-	std::swap(gap_left , other.gap_left);
-    std::swap( gap_right , other.gap_right );
-    std::swap(size , other.size);
-	     return *this ;
-}
-
-void Print_buf(){
-     std::cout << "the gap buffer "
-		<< "with size "<< size << " and buf_size "<<gap_size<< std:: endl;
-        for (int i = 0; i < size; i++) {
-		std::cout << buffer[i]<<" ";
+	public:	//Default constructor
+		MyGap_Buffer(): gap_size {}, buffer
+		{
+			nullptr
+		}, gap_left {}, gap_right {}, size {} {}
+	MyGap_Buffer(std::string Myword)	//Parameterized constructor
+	{
+		this->gap_size = Myword.length() *2;
+		this->size = Myword.length() + gap_size;
+		buffer = new char[size];
+		for (int i = 0; i < Myword.length(); i++)
+		{
+			buffer[i] = Myword[i];
+		}
+		for (int i = Myword.length(); i < size; i++)
+		{
+			buffer[i] = '-';
+		}
+		gap_left = size - gap_size;
+		gap_right = size - 1;
 	}
-     std::cout<<std::endl;
- }
- int get_left(){
-	return gap_left ;
-}
-int get_rigth(){
-	return gap_right;
-}
-
-int get_gap_size(){
-	return gap_size;
-}
-void move_left(int index_to) // Move the gap left character by character and the buffers
-{
-    if(index_to >= 0){
-         while (index_to < gap_left) {
-             gap_left--;
-             gap_right--;
-             buffer[gap_right+1] = buffer[gap_left];
-             buffer[gap_left]='-';
-            }
-    }
-    else{std::cout<<"your cursot is out of your array"<<std::endl;}
-}
-void move_right(int index_to) //Move the gap right character by character and the buffers
-{
-    if(index_to + gap_size <= size){
-         while (index_to > gap_left) {
-             gap_left++;
-             gap_right++;
-             buffer[gap_left-1] = buffer[gap_right];
-             buffer[gap_right]='-';
-        }
-    }
-    else{std::cout<<"your cursot is out of your array"<<std::endl;}
-}
-void move_cursor_to(int index_to)
-{
-    if (index_to < gap_left) {
-        move_left(index_to);
-    }
-    else {
-        move_right(index_to);
-    }
-}
-void expand(int num_to_exp, int index)
-{
-    char mid1[ index  ];
-    char mid2[ size - index ];
-    if((index < gap_left ) || (index > gap_right)){
-        std::cout<<"you can not expend new buffer in that position"<<std::endl;
-    }
-    else{
-        for (int i = 0 ; i < index; i++) { // Copy characters of buffer to mid[] befor "index"
-             mid1[i ] = buffer[i];
-        } 
-        for (int i = index  ; i < size; i++) { // Copy characters of buffer to mid[] after "index"
-             mid2[i - index ] = buffer[i];
-        }   
-          size += num_to_exp;
-          gap_right+=num_to_exp;
-          gap_size+= num_to_exp;
-          delete[]buffer;
-          buffer = new char[size];
-        for( int i = 0 ; i < index ; i++){
-            buffer[i] = mid1[i];
-        }
-        for (int i = 0; i < num_to_exp; i++) {// Insert a gap from index position gap is being represented by '-'
-             buffer[i + index] = '-';
-        }
-        for(int i = 0 ; i < size ; i++){
-            buffer[i + index + num_to_exp] = mid2[i];
-        }
-               
-    }
-}
-void insert_string(std::string input, int position)
-{
-  
-    if (position != gap_left) { //move the cursor to index
-        move_cursor_to(position); 
-    }   
-    for(int i = 0 ; i < input.length(); ++i){ //Insert characters one by one
-           if (gap_right == gap_left) {  // If the gap is empty expend the buffer
-             int exp_gap =   input.length() * 2 ;
-             expand(exp_gap, position);
-            }           
-            buffer[gap_left] = input[i]; // Insert the sring in the gap and  move the gap
-            gap_left++;
-            position++;
-    }
-	gap_size = gap_right - gap_left + 1;
-}
-void insert_char(char input, int position)
-{
-  
-    if (position != gap_left) { //move the cursor to index
-        move_cursor_to(position); 
-    }   
-            if (gap_right == gap_left) {  // If the gap is empty expend the buffer
-            int exp_gap =  10 ;
-             expand(exp_gap, position);
-            }           
-            buffer[gap_left] = input; // Insert the char in the gap and  move the gap
-            gap_left++;
-            position++;
-    
-	gap_size = gap_right - gap_left + 1;
-}
-int Size(){
-    return size;
-}
-void empty(){
-	delete [] buffer;
-	buffer = nullptr;
-	size = 0 ;
-}
-std::string get_string(int first_pos , int last_pos){
-	std::string rezult ={};
-	if((first_pos >= size) || (last_pos >= size)){
-        return "your position out of your ARRAY";
+	MyGap_Buffer(const MyGap_Buffer &other)
+	{
+		//Copy constructor
+		this->gap_size = other.gap_size;
+		this->buffer = new char[other.gap_size];
+		this->gap_left = other.gap_left;
+		this->gap_right = other.gap_right;
+		this->size = other.size;
+		for (int i = 0; i < other.size; i++)
+		{
+			this->buffer[i] = other.buffer[i];
+		}
 	}
-	for(int i = first_pos ; i <= last_pos ; ++i){
-		rezult +=buffer[i];
+	MyGap_Buffer(MyGap_Buffer && other): gap_size
+	{
+		other.gap_size
+	}, gap_left
+	{
+		other.gap_left
+	}, gap_right
+	{
+		other.gap_right
+	}, buffer
+	{
+		other.buffer
 	}
-	return rezult;
-}
-char get_char(int position){
-	if(position >= size){
-      std::cout<<"your position out of your ARRAY"<<std::endl;
-	  return '0';
+	{
+		other.buffer = nullptr;
+		other.gap_size = 0;
+		other.gap_left = 0;
+		other.gap_right = 0;
+	}~MyGap_Buffer()	//Destructor
+	{
+		delete[] buffer;
+		buffer = nullptr;
 	}
-	return buffer[position];
-}
-void erase( int ferst_index , int last_index ){
+	MyGap_Buffer &operator=(const MyGap_Buffer &other)
+	{
+		//Copy operator assignment =
+		if (this == &other)
+		{
+			return * this;
+		}
+		else
+		{
+			this->gap_size = other.gap_size;
+			this->gap_left = other.gap_left;
+			this->gap_right = other.gap_right;
+			this->size = other.size;
+			this->buffer = new char[other.gap_size];
+			for (int i = 0; i < other.size; i++)
+			{
+				this->buffer[i] = other.buffer[i];
+			}
+			return * this;
+		}
+	}
+	MyGap_Buffer &operator=(MyGap_Buffer && other)	//Move operator assignment =
+	{
+		this->gap_size = other.gap_size;
+		this->buffer = other.buffer;
+		this->gap_left = other.gap_left;
+		this->gap_right = other.gap_right;
+		this->size = other.size;
+		other.buffer = nullptr;
+		return * this;
+	}
+	void Print_buf()
+	{
+		std::cout << "the gap buffer " <<
+			"with size " << size << " and buf_size " << gap_size << std::endl;
+		for (int i = 0; i < size; i++)
+		{
+			std::cout << buffer[i] << " ";
+		}
+		std::cout << std::endl;
+	}
+	int get_left()
+	{
+		return gap_left;
+	}
+	int get_rigth()
+	{
+		return gap_right;
+	}
+	int get_gap_size()
+	{
+		return gap_size;
+	}
+	void move_left(int index_to)	// Move the gap left character by character and the buffers
+	{
+		if (index_to >= 0)
+		{
+			while (index_to < gap_left)
+			{
+				gap_left--;
+				gap_right--;
+				buffer[gap_right + 1] = buffer[gap_left];
+				buffer[gap_left] = '-';
+			}
+		}
+		else
+		{
+			std::cout << "your cursot is out of your array" << std::endl;
+		}
+	}
+	void move_right(int index_to)	//Move the gap right character by character and the buffers
+	{
+		if (index_to + gap_size <= size)
+		{
+			while (index_to > gap_left)
+			{
+				gap_left++;
+				gap_right++;
+				buffer[gap_left - 1] = buffer[gap_right];
+				buffer[gap_right] = '-';
+			}
+		}
+		else
+		{
+			std::cout << "your cursot is out of your array" << std::endl;
+		}
+	}
+	void move_cursor_to(int index_to)
+	{
+		if (index_to < gap_left)
+		{
+			move_left(index_to);
+		}
+		else
+		{
+			move_right(index_to);
+		}
+	}
+	void expand(int num_to_exp, int index)
+	{
+		char mid1[index];
+		char mid2[size - index];
+		if ((index < gap_left) || (index > gap_right))
+		{
+			std::cout << "you can not expend new buffer in that position" << std::endl;
+		}
+		else
+		{
+			for (int i = 0; i < index; i++)
+			{
+				// Copy characters of buffer to mid[] befor "index"
+				mid1[i] = buffer[i];
+			}
+			for (int i = index; i < size; i++)
+			{
+				// Copy characters of buffer to mid[] after "index"
+				mid2[i - index] = buffer[i];
+			}
+			size += num_to_exp;
+			gap_right += num_to_exp;
+			gap_size += num_to_exp;
+			delete[] buffer;
+			buffer = new char[size];
+			for (int i = 0; i < index; i++)
+			{
+				buffer[i] = mid1[i];
+			}
+			for (int i = 0; i < num_to_exp; i++)
+			{
+				// Insert a gap from index position gap is being represented by '-'
+				buffer[i + index] = '-';
+			}
+			for (int i = 0; i < size; i++)
+			{
+				buffer[i + index + num_to_exp] = mid2[i];
+			}
+		}
+	}
+	void insert_string(std::string input, int position)
+	{
 
-    if(ferst_index != gap_left){
-        move_cursor_to(ferst_index );
-    }
-    for(int i = gap_right ; i < size ; i++){
-        buffer[i] = buffer[i-1];
-        gap_right++;
-        gap_size++;
-    }
- /*  if((ferst_index < gap_left) || (last_index > gap_right)){
-       std::cout<<"your indexes out of your index"<<std::endl;
-   }
-   else{
+		if (position != gap_left)
+		{
+			//move the cursor to index
+			move_cursor_to(position);
+		}
+		for (int i = 0; i < input.length(); ++i)
+		{
+			//Insert characters one by one
+			if (gap_right == gap_left)
+			{
+				// If the gap is empty expend the buffer
+				int exp_gap = input.length() *2;
+				expand(exp_gap, position);
+			}
+			buffer[gap_left] = input[i];	// Insert the sring in the gap and  move the gap
+			gap_left++;
+			position++;
+		}
+		gap_size = gap_right - gap_left + 1;
+	}
+	void insert_char(char input, int position)
+	{
 
-   }*/
-    
-}
+		if (position != gap_left)
+		{
+			//move the cursor to index
+			move_cursor_to(position);
+		}
+		if (gap_right == gap_left)
+		{
+			// If the gap is empty expend the buffer
+			int exp_gap = 10;
+			expand(exp_gap, position);
+		}
+		buffer[gap_left] = input;	// Insert the char in the gap and  move the gap
+		gap_left++;
+		position++;
+
+		gap_size = gap_right - gap_left + 1;
+	}
+	int Size()
+	{
+		return size;
+	}
+	void empty()
+	{
+		delete[] buffer;
+		buffer = nullptr;
+		size = 0;
+	}
+	std::string get_string(int first_pos, int last_pos)
+	{
+		std::string rezult = {};
+		if ((first_pos >= size) || (last_pos >= size))
+		{
+			return "your position out of your ARRAY";
+		}
+		for (int i = first_pos; i <= last_pos; ++i)
+		{
+			rezult += buffer[i];
+		}
+		return rezult;
+	}
+	char get_char(int position)
+	{
+		if (position >= size)
+		{
+			std::cout << "your position out of your ARRAY" << std::endl;
+			return '0';
+		}
+		return buffer[position];
+	}
+	void erase(int ferst_index, int last_index)
+	{
+
+		if (ferst_index != gap_left)
+		{
+			move_cursor_to(ferst_index);
+		}
+		for (int i = gap_right; i < size; i++)
+		{
+			buffer[i] = buffer[i - 1];
+			gap_right++;
+			gap_size++;
+		}
+	}
+	friend std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt);
 };
-int main(){
-     MyGap_Buffer aaa("vahan");
-     aaa.Print_buf();
-     aaa.insert_string("vahan" , 0);
-   // aaa.insert_string("11111111111111111111111111111111111111111", 0 );  
-     aaa.Print_buf();
-     aaa.insert_char('V' , 6);
-     aaa.insert_char( 'B', 8);
-     aaa.Print_buf();
-     aaa.erase(3 , 15);
-     aaa.Print_buf();
-     //std::cout<<"left is: "<<aaa.get_left()<<std::endl;
-     //std::cout<<"rigth is: "<<aaa.get_rigth()<<std::endl;
-   
-
-
-    
+std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt)
+{
+	for (int i = 0; i < dt.size; i++)
+	{
+		if (dt.buffer[i] != '-')
+		{
+			os << dt.buffer[i];
+		}
+	}
+	return os;
+}
+int main()
+{
+	MyGap_Buffer aaa("vahan");
+	aaa.Print_buf();
+	aaa.insert_string("vahan", 0);
+	aaa.Print_buf();
+	std::cout << aaa;
+	return 0;
 }
