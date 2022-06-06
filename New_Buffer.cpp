@@ -130,46 +130,44 @@ void move_cursor_to(int index_to)
 }
 void expand(int num_to_exp, int index)
 {
-    char mid[ size  ];
+    char mid1[ index  ];
+    char mid2[ size - index ];
     if((index < gap_left ) || (index > gap_right)){
         std::cout<<"you can not expend new buffer in that position"<<std::endl;
     }
     else{
-        for (int i = index ; i < size; i++) { // Copy characters of buffer to mid[] after "index"
-             mid[i - index ] = buffer[i];
+        for (int i = 0 ; i < index; i++) { // Copy characters of buffer to mid[] befor "index"
+             mid1[i ] = buffer[i];
+        } 
+        for (int i = index  ; i < size; i++) { // Copy characters of buffer to mid[] after "index"
+             mid2[i - index ] = buffer[i];
         }   
-       /* std::cout<<"mid[] is: ";
-        for(int i = 0 ; i < size - index ; i++){
-            std::cout<<mid[i];
-        }*/
-        std::cout<<std::endl;
-        for (int i = 0; i < num_to_exp; i++) {// Insert a gap from index position gap is being represented by '-'
-             buffer[i + index] = '-';
-        }
-        std::cout<<"buffer i + index = "<<std::endl;
-        for(int i = 0 ; i < num_to_exp ; i++ ){
-            std::cout<<buffer[i+index];
-        }
-        std::cout<<std::endl;
-        for (int i = 0; i < index + num_to_exp; i++) { // Reinsert the remaining array
-             buffer[ index + num_to_exp + i] = mid[i];
-        }
           size += num_to_exp;
           gap_right+=num_to_exp;
           gap_size+= num_to_exp;
+          delete[]buffer;
+          buffer = new char[size];
+        for( int i = 0 ; i < index ; i++){
+            buffer[i] = mid1[i];
+        }
+        for (int i = 0; i < num_to_exp; i++) {// Insert a gap from index position gap is being represented by '-'
+             buffer[i + index] = '-';
+        }
+        for(int i = 0 ; i < size ; i++){
+            buffer[i + index + num_to_exp] = mid2[i];
+        }
+               
     }
 }
 void insert_string(std::string input, int position)
 {
-   // int len = input.length();
-  //  int i = 0;
+  
     if (position != gap_left) { //move the cursor to index
         move_cursor_to(position); 
-        //std::cout<<"move to cursor"<<std::endl;
     }   
-    for(int i = 0 ; i < input.length(); ++i){ //while (i < len) { // Insert characters one by one
+    for(int i = 0 ; i < input.length(); ++i){ //Insert characters one by one
            if (gap_right == gap_left) {  // If the gap is empty expend the buffer
-             int exp_gap =  10 ;// input.length() * 2 ;
+             int exp_gap =   input.length() * 2 ;
              expand(exp_gap, position);
             }           
             buffer[gap_left] = input[i]; // Insert the sring in the gap and  move the gap
@@ -177,21 +175,60 @@ void insert_string(std::string input, int position)
             position++;
     }
 	gap_size = gap_right - gap_left + 1;
+}
+void insert_char(char input, int position)
+{
+  
+    if (position != gap_left) { //move the cursor to index
+        move_cursor_to(position); 
+    }   
+            if (gap_right == gap_left) {  // If the gap is empty expend the buffer
+            int exp_gap =  10 ;
+             expand(exp_gap, position);
+            }           
+            buffer[gap_left] = input; // Insert the char in the gap and  move the gap
+            gap_left++;
+            position++;
+    
+	gap_size = gap_right - gap_left + 1;
+}
+int Size(){
+    return size;
+}
+void empty(){
+	delete [] buffer;
+	buffer = nullptr;
+	size = 0 ;
+}
+std::string get_string(int first_pos , int last_pos){
+	std::string rezult ={};
+	if((first_pos >= size) || (last_pos >= size)){
+        return "your position out of your ARRAY";
+	}
+	for(int i = first_pos ; i <= last_pos ; ++i){
+		rezult +=buffer[i];
+	}
+	return rezult;
+}
+char get_char(int position){
+	if(position >= size){
+      std::cout<<"your position out of your ARRAY"<<std::endl;
+	  return '0';
+	}
+	return buffer[position];
 	
-
 }
 };
 int main(){
      MyGap_Buffer aaa("vahan");
      aaa.Print_buf();
-     //aaa.insert_string("vahan" , 10);
-     //aaa.move_cursor_to(0);
-    //aaa.expand(4 , 9);
-    aaa.expand( 20 , 5);
-   // aaa.insert_string("his name is ansddddd ", 0 );  
-     
-     //aaa.insert_string("000000000" , 9);
+     aaa.insert_string("vahan" , 0);
+   // aaa.insert_string("11111111111111111111111111111111111111111", 0 );  
      aaa.Print_buf();
+     aaa.insert_char('V' , 6);
+     aaa.insert_char( 'B', 8);
+     aaa.Print_buf();
+     
      std::cout<<"left is: "<<aaa.get_left()<<std::endl;
      std::cout<<"rigth is: "<<aaa.get_rigth()<<std::endl;
    
