@@ -299,13 +299,13 @@ class MyGap_Buffer
 	}
 	friend std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt);
 };
-std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt)
+std::ostream &operator<<(std::ostream &os, const MyGap_Buffer & MyBuf)
 {
-	for (int i = 0; i < dt.size; i++)
+	for (int i = 0; i < MyBuf.size; i++)
 	{
-		if (dt.buffer[i] != '-')
+		if (MyBuf.buffer[i] != '-')
 		{
-			os << dt.buffer[i];
+			os << MyBuf.buffer[i];
 		}
 	}
 	return os;
