@@ -216,8 +216,11 @@ char get_char(int position){
 	  return '0';
 	}
 	return buffer[position];
-	
 }
+/*void erase( int ferst_index , int last_index ){
+if(last_index != gap_left)
+    
+}*/
 };
 int main(){
      MyGap_Buffer aaa("vahan");
