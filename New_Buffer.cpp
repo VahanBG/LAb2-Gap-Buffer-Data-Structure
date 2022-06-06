@@ -217,10 +217,24 @@ char get_char(int position){
 	}
 	return buffer[position];
 }
-/*void erase( int ferst_index , int last_index ){
-if(last_index != gap_left)
+void erase( int ferst_index , int last_index ){
+
+    if(ferst_index != gap_left){
+        move_cursor_to(ferst_index );
+    }
+    for(int i = gap_right ; i < size ; i++){
+        buffer[i] = buffer[i-1];
+        gap_right++;
+        gap_size++;
+    }
+ /*  if((ferst_index < gap_left) || (last_index > gap_right)){
+       std::cout<<"your indexes out of your index"<<std::endl;
+   }
+   else{
+
+   }*/
     
-}*/
+}
 };
 int main(){
      MyGap_Buffer aaa("vahan");
@@ -231,9 +245,10 @@ int main(){
      aaa.insert_char('V' , 6);
      aaa.insert_char( 'B', 8);
      aaa.Print_buf();
-     
-     std::cout<<"left is: "<<aaa.get_left()<<std::endl;
-     std::cout<<"rigth is: "<<aaa.get_rigth()<<std::endl;
+     aaa.erase(3 , 15);
+     aaa.Print_buf();
+     //std::cout<<"left is: "<<aaa.get_left()<<std::endl;
+     //std::cout<<"rigth is: "<<aaa.get_rigth()<<std::endl;
    
 
 
