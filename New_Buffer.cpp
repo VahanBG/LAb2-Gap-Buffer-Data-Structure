@@ -311,7 +311,7 @@ int main()
 	aaa.insert_string("vahan", 0);
 	aaa.Print_buf();
 	aaa.erase( 1 , 5);
-	std::cout << aaa<<std::endl;
+	std::cout << aaa <<std::endl;
 	aaa.Print_buf();
 	return 0;
 }
