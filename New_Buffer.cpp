@@ -268,15 +268,26 @@ char get_char(int position)
 }
 void erase(int ferst_index, int last_index)
 {
-	if (ferst_index != gap_left)
+	int mid_index = last_index - ferst_index +1;
+	if ( mid_index < gap_size)
 	{
-		move_cursor_to(ferst_index);
-	}
-	for (int i = gap_right; i < size; i++)
-	{
+		move_cursor_to(size - mid_index - gap_size  );
+		for (int i = gap_right +1; i < size ; i++)
+	    {
 		buffer[i] = buffer[i - 1];
 		gap_right++;
 		gap_size++;
+	    }
+	}
+	else{
+		move_cursor_to(ferst_index);
+		int mid_index1 = gap_size + mid_index + ferst_index;
+         for (int i = ferst_index + gap_size ; i < mid_index1 ; i++)
+	    {
+		buffer[i] = buffer[i - 1];
+		gap_right++;
+		gap_size++;
+		}
 	}
 }
 friend std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt);
@@ -298,6 +309,8 @@ int main()
 	aaa.Print_buf();
 	aaa.insert_string("vahan", 0);
 	aaa.Print_buf();
-	std::cout << aaa;
+	aaa.erase( 1 , 5);
+	//std::cout << aaa;
+	aaa.Print_buf();
 	return 0;
 }
