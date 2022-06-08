@@ -250,7 +250,7 @@ void empty()
 std::string get_string(int first_pos, int last_pos)
 {
 	std::string rezult = {};
-	if ((first_pos < 0) || (last_pos >= size))
+	if ((first_pos < 0) || (last_pos >= size) || (last_pos < 0) || (first_pos >= size))
 	{
 		return "your position out of your ARRAY";
 	}
@@ -303,6 +303,8 @@ bool is_empty(){
 	}
 }
 };	
+
+
 std::ostream &operator<<(std::ostream &os, const MyGap_Buffer & MyBuf)
 {
 	for (int i = 0; i < MyBuf.size; i++)
