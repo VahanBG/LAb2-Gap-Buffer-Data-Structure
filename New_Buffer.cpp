@@ -35,11 +35,11 @@ MyGap_Buffer(std::string Myword)	//Parameterized constructor
 MyGap_Buffer(const MyGap_Buffer &other)
 {
 	//Copy constructor
-	this->gap_size = other.gap_size;
-	this->buffer = new char[other.gap_size];
-	this->gap_left = other.gap_left;
-	this->gap_right = other.gap_right;
 	this->size = other.size;
+	this->gap_size = other.gap_size;
+	this->buffer = new char[other.size];
+	this->gap_left = other.gap_left;
+	this->gap_right = other.gap_right;	
 	for (int i = 0; i < other.size; i++)
 	{
 		this->buffer[i] = other.buffer[i];
@@ -70,7 +70,7 @@ MyGap_Buffer &operator=(const MyGap_Buffer &other)
 		this->gap_left = other.gap_left;
 		this->gap_right = other.gap_right;
 		this->size = other.size;
-		this->buffer = new char[other.gap_size];
+		this->buffer = new char[other.size];
 		for (int i = 0; i < other.size; i++)
 		{
 			this->buffer[i] = other.buffer[i];
@@ -79,7 +79,10 @@ MyGap_Buffer &operator=(const MyGap_Buffer &other)
 	}
 }
 MyGap_Buffer &operator=(MyGap_Buffer && other)	//Move operator assignment =
-{
+{   
+	if(this-> buffer != nullptr){
+             delete[]buffer;
+    }
 	this->gap_size = other.gap_size;
 	this->buffer = other.buffer;
 	this->gap_left = other.gap_left;
