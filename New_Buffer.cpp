@@ -131,9 +131,9 @@ void move_left(int index_to)	// Move the gap left character by character and the
 }
 void move_right(int index_to)	//Move the gap right character by character and the buffers
 {
-	if (index_to + gap_size <= size)
+	if (size - gap_size  >= index_to)
 	{
-		while (index_to > gap_left)
+		while ((index_to > gap_left) && (gap_right <= size))
 		{
 			gap_left++;
 			gap_right++;
@@ -152,15 +152,17 @@ void move_cursor_to(int index_to)
 	{
 		move_left(index_to);
 	}
-	else
-	{
+	/*if ((index_to >= gap_left) && (index_to <= gap_right)){
+		return ;
+	}*/
+	else{
 		move_right(index_to);
 	}
 }
 void expand(int num_to_exp, int index)
 {
 	char mid1[index];
-	char mid2[size - index];
+	char mid2[size - index - 1];
 	if ((index < gap_left) || (index > gap_right))
 	{
 		std::cout << "you can not expend new buffer in that position" << std::endl;
@@ -172,13 +174,13 @@ void expand(int num_to_exp, int index)
 			// Copy characters of buffer to mid[] befor "index"
 			mid1[i] = buffer[i];
 		}
-		for (int i = index; i < size; i++)
+		for (int i = index  ; i < size; i++)
 		{
 			// Copy characters of buffer to mid[] after "index"
-			mid2[i - index] = buffer[i];
+			mid2[i - index ] = buffer[i];
 		}
 		size += num_to_exp;
-		gap_right += num_to_exp;
+		gap_right += num_to_exp -1;
 		gap_size += num_to_exp;
 		delete[] buffer;
 		buffer = new char[size];
@@ -229,12 +231,11 @@ void insert_char(char input, int position)
 	if (gap_right == gap_left)
 	{
 		// If the gap is empty expend the buffer
-		int exp_gap = 10;
+		int exp_gap = gap_size;
 		expand(exp_gap, position);
 	}
 	buffer[gap_left] = input;	// Insert the char in the gap and  move the gap
 	gap_left++;
-	position++;
 	gap_size = gap_right - gap_left + 1;
 }
 int Size()
@@ -323,8 +324,12 @@ int main()
 	aaa.Print_buf();
 	aaa.insert_string("vahan", 0);
 	aaa.Print_buf();
-	aaa.erase( 1 , 5);
-	std::cout << aaa <<std::endl;
+	//aaa.erase( 1 , 5);
+	//std::cout << aaa <<std::endl;
+	aaa.expand( 10, 6);
+	//aaa.move_cursor_to(13);
+	//aaa.move_right(11);
+
 	aaa.Print_buf();
 	return 0;
 }
