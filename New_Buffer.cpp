@@ -152,9 +152,9 @@ void move_cursor_to(int index_to)
 	{
 		move_left(index_to);
 	}
-	/*if ((index_to >= gap_left) && (index_to <= gap_right)){
+	if (index_to == gap_left){
 		return ;
-	}*/
+	}
 	else{
 		move_right(index_to);
 	}
