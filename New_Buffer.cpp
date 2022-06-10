@@ -274,6 +274,10 @@ void erase(int ferst_index, int last_index)
 {
 	int mid_index = last_index - ferst_index + 1;
 	int last = 0;
+	if((last_index < 0) || (ferst_index < 0 )){
+		std::cout<<"your position is  wrong, please enter anather position"<<std::endl;
+		return;
+	}
 	if  (ferst_index < gap_left) 
 	{
 		if (last_index >= gap_left) {
@@ -344,5 +348,6 @@ int main()
 	 aaa.Print_buf();
 	 aaa.expand( 10 , 5);
 	 aaa.Print_buf();
+	 aaa.erase( 1 , -5);
 	return 0;
 }
