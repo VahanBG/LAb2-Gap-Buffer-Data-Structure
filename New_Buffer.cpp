@@ -273,25 +273,39 @@ char get_char(int position)
 void erase(int ferst_index, int last_index)
 {
 	int mid_index = last_index - ferst_index + 1;
-	if ( mid_index < gap_size)
+	int last = 0;
+	if  (ferst_index < gap_left) 
 	{
-		move_cursor_to(size - mid_index - gap_size  );
-		for (int i = gap_right + 1; i < size ; i++)
-	    {
-		buffer[i] = buffer[i - 1];
-		gap_right++;
-		gap_size++;
-	    }
+		if (last_index >= gap_left) {
+			std::cout<<"your position is in your buffer, you can not erase it, please enter anather position"<<std::endl;
+		}
+		 else{
+			      move_cursor_to(ferst_index );
+		            for (int i = gap_right + 1; i < gap_right + mid_index +1 ; i++)
+	                {
+		             buffer[i] = buffer[i - 1];
+		             last++;
+		         //gap_right++;
+		              gap_size++;
+	                }
+		            gap_right+= last;
+		 }
 	}
 	else{
-		move_cursor_to(ferst_index);
-		int mid_index1 = gap_size + mid_index + ferst_index;
-         for (int i = ferst_index + gap_size ; i < mid_index1 ; i++)
-	    {
-		buffer[i] = buffer[i - 1];
-		gap_right++;
-		gap_size++;
+		if( ((ferst_index >= gap_left) && (ferst_index <= gap_right)) || (last_index >= size)){
+			std::cout<<"your position is in your buffer, you can not erase it, please enter anather position"<<std::endl;
 		}
+		else{
+		    move_cursor_to(gap_left + mid_index);
+			
+		       for (int i = gap_left ; i > gap_left-mid_index  ; i--)
+	           {
+		       buffer[i-1] = buffer[i];
+			   last++;
+		        gap_size++;
+		      }
+			  gap_left-=last;
+	    }
 	}
 }
 friend std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt);
@@ -324,12 +338,11 @@ int main()
 	aaa.Print_buf();
 	aaa.insert_string("vahan", 0);
 	aaa.Print_buf();
-	//aaa.erase( 1 , 5);
-	//std::cout << aaa <<std::endl;
-	aaa.expand( 10, 6);
-	//aaa.move_cursor_to(13);
-	//aaa.move_right(11);
-
+	aaa.erase(10 , 14);
 	aaa.Print_buf();
+	aaa.erase( 0 , 1);
+	 aaa.Print_buf();
+	 aaa.expand( 10 , 5);
+	 aaa.Print_buf();
 	return 0;
 }
