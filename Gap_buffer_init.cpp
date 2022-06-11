@@ -1,20 +1,8 @@
-#include <iostream>
-#include <string>
-#include <fstream>
+#include "Gap_Buffer.h"
 
-class MyGap_Buffer
-{
-private:
-	char *buffer;
-	int gap_size;
-	int gap_left;
-	int gap_right;
-	int size;
-
-public:	//Default constructor
-MyGap_Buffer(): gap_size {},buffer{nullptr}, gap_left {}, gap_right {}, size {}
-{}
-MyGap_Buffer(std::string Myword)	//Parameterized constructor
+MyGap_Buffer::MyGap_Buffer(): buffer{nullptr},gap_size {}, gap_left {}, gap_right {}, size {}
+{} 
+MyGap_Buffer::MyGap_Buffer(std::string Myword)
 {
 	this->gap_size = Myword.length() *2;
 	this->size = Myword.length() + gap_size;
@@ -29,8 +17,8 @@ MyGap_Buffer(std::string Myword)	//Parameterized constructor
 	}
 	gap_left = size - gap_size;
 	gap_right = size - 1;
-}
-MyGap_Buffer(const MyGap_Buffer &other)
+}   
+MyGap_Buffer::MyGap_Buffer(const MyGap_Buffer &other)
 {
 	//Copy constructor
 	this->size = other.size;
@@ -43,19 +31,19 @@ MyGap_Buffer(const MyGap_Buffer &other)
 		this->buffer[i] = other.buffer[i];
 	}
 }
-MyGap_Buffer(MyGap_Buffer && other): gap_size{other.gap_size},gap_left{other.gap_left},gap_right{other.gap_right},buffer{other.buffer}
+MyGap_Buffer::MyGap_Buffer(MyGap_Buffer&& other): gap_size{other.gap_size},gap_left{other.gap_left},gap_right{other.gap_right},buffer{other.buffer}
 {
 	other.buffer = nullptr;
 	other.gap_size = 0;
 	other.gap_left = 0;
 	other.gap_right = 0;
 }
-~MyGap_Buffer()	//Destructor
+MyGap_Buffer::~MyGap_Buffer()	//Destructor
 {
 	delete[] buffer;
 	buffer = nullptr;
 }
-MyGap_Buffer &operator=(const MyGap_Buffer &other)
+MyGap_Buffer& MyGap_Buffer::operator=(const MyGap_Buffer &other)
 {
 	//Copy operator assignment =
 	if (this == &other)
@@ -76,7 +64,7 @@ MyGap_Buffer &operator=(const MyGap_Buffer &other)
 		return * this;
 	}
 }
-MyGap_Buffer &operator=(MyGap_Buffer && other)	//Move operator assignment =
+MyGap_Buffer& MyGap_Buffer::operator=(MyGap_Buffer && other)	//Move operator assignment =
 {   
 	if(this-> buffer != nullptr){
              delete[]buffer;
@@ -89,7 +77,7 @@ MyGap_Buffer &operator=(MyGap_Buffer && other)	//Move operator assignment =
 	other.buffer = nullptr;
 	return * this;
 }
-void Print_buf()
+void MyGap_Buffer::Print_buf()
 {
 	std::cout << "the gap buffer " <<"with size " << size << " and buf_size " << gap_size << std::endl;
 	for (int i = 0; i < size; i++)
@@ -98,19 +86,19 @@ void Print_buf()
 		}
 		std::cout << std::endl;
 }
-int get_left()
+int MyGap_Buffer::get_left()
 {
 	return gap_left;
 }
-int get_rigth()
+int MyGap_Buffer::get_rigth()
 {
 	return gap_right;
 }
-int get_gap_size()
+int MyGap_Buffer::get_gap_size()
 {
 	return gap_size;
 }
-void move_left(int index_to)	// Move the gap left character by character and the buffers
+void MyGap_Buffer::move_left(int index_to)	// Move the gap left character by character and the buffers
 {
 	if (index_to >= 0)
 	{
@@ -127,7 +115,7 @@ void move_left(int index_to)	// Move the gap left character by character and the
 		std::cout << "your cursot is out of your array" << std::endl;
 	}
 }
-void move_right(int index_to)	//Move the gap right character by character and the buffers
+void MyGap_Buffer::move_right(int index_to)	//Move the gap right character by character and the buffers
 {
 	if (size - gap_size  >= index_to)
 	{
@@ -144,7 +132,7 @@ void move_right(int index_to)	//Move the gap right character by character and th
 		std::cout << "your cursot is out of your array" << std::endl;
 	}
 }
-void move_cursor_to(int index_to)
+void MyGap_Buffer::move_cursor_to(int index_to)
 {
 	if (index_to < gap_left)
 	{
@@ -157,7 +145,7 @@ void move_cursor_to(int index_to)
 		move_right(index_to);
 	}
 }
-void expand(int num_to_exp, int index)
+void MyGap_Buffer::expand(int num_to_exp, int index)
 {
 	char mid1[index];
 	char mid2[size - index - 1];
@@ -197,7 +185,7 @@ void expand(int num_to_exp, int index)
 		}
 	}
 }
-void insert_string(std::string input, int position)
+void MyGap_Buffer::insert_string(std::string input, int position)
 {
 	if (position != gap_left)
 	{
@@ -219,7 +207,7 @@ void insert_string(std::string input, int position)
 	}
 	gap_size = gap_right - gap_left + 1;
 }
-void insert_char(char input, int position)
+void MyGap_Buffer::insert_char(char input, int position)
 {
 	if (position != gap_left)
 	{
@@ -236,17 +224,17 @@ void insert_char(char input, int position)
 	gap_left++;
 	gap_size = gap_right - gap_left + 1;
 }
-int Size()
+int MyGap_Buffer::Size()
 {
 	return size;
 }
-void empty()
+void MyGap_Buffer::empty()
 {
 	delete[] buffer;
 	buffer = nullptr;
 	size = 0;
 }
-std::string get_string(int first_pos, int last_pos)
+std::string MyGap_Buffer::get_string(int first_pos, int last_pos)
 {
 	std::string rezult = {};
 	if ((first_pos < 0) || (last_pos >= size) || (last_pos < 0) || (first_pos >= size))
@@ -259,7 +247,7 @@ std::string get_string(int first_pos, int last_pos)
 	}
 	return rezult;
 }
-char get_char(int position)
+char MyGap_Buffer::get_char(int position)
 {
 	if ((position < 0) || (position >= size))
 	{
@@ -268,7 +256,7 @@ char get_char(int position)
 	}
 	return buffer[position];
 }
-void erase(int ferst_index, int last_index)
+void MyGap_Buffer::erase(int ferst_index, int last_index)
 {
 	int mid_index = last_index - ferst_index + 1;
 	int last = 0;
@@ -310,42 +298,11 @@ void erase(int ferst_index, int last_index)
 	    }
 	}
 }
-friend std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt);
-bool is_empty(){
+bool MyGap_Buffer::is_empty(){
 	if(gap_size == 0){
 		return true;
 	}
 	else{
 		return false;
 	}
-}
-};	
-
-
-std::ostream &operator<<(std::ostream &os, const MyGap_Buffer & MyBuf)
-{
-	for (int i = 0; i < MyBuf.size; i++)
-	{
-		if (MyBuf.buffer[i] != '-')
-		{
-			os << MyBuf.buffer[i];
-		}
-		
-	}
-	return os;
-}
-int main()
-{
-	MyGap_Buffer aaa;
-	aaa.Print_buf();
-	aaa.insert_string("vahan", 0);
-	aaa.Print_buf();
-	aaa.erase(10 , 14);
-	aaa.Print_buf();
-	aaa.erase( 0 , 1);
-	 aaa.Print_buf();
-	 aaa.expand( 10 , 5);
-	 aaa.Print_buf();
-	 aaa.erase( 1 , -5);
-	return 0;
 }
