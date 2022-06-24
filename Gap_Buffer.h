@@ -23,7 +23,7 @@ class MyGap_Buffer
 		MyGap_Buffer &operator=(const MyGap_Buffer &);
 	    MyGap_Buffer &operator=(MyGap_Buffer &&);
         friend std::ostream &operator<<(std::ostream &os, const MyGap_Buffer &dt);
-	public:
+	public: 
 		void Print_buf();    //print all buffer
 	    int get_left();      
 	    int get_rigth();     
